@@ -11,13 +11,20 @@ connectDB();
 
 const app = express();
 
-// Middleware
-app.use(cors({
-  origin: 'https://ecom-frontend-4hvk.onrender.com',
-  credentials: true, // if you're using cookies/auth
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
-}));
+const corsOptions = {
+  origin: [
+    'https://ecom-frontend-4hvk.onrender.com',
+    'https://*.ecom-frontend-4hvk.onrender.com', // Allow all subdomains
+    /https:\/\/ecom-frontend-4hvk\.render\.com$/, // Regex for exact domain
+    /https:\/\/.*\.ecom-frontend-4hvk\.render\.com$/ // Regex for all subdomains
+  ],
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH', 'HEAD'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept', 'Origin'],
+  exposedHeaders: ['Content-Range', 'X-Content-Range']
+};
+
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
